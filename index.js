@@ -7,7 +7,7 @@ const PORT = process.env.PORT || 8080;
 const server = http.createServer((req, res) => {
   if (req.url === '/health' || req.url === '/') {
     res.writeHead(200, { 'Content-Type': 'text/plain; charset=utf-8' });
-    res.end('Project Nexus P2P Matchmaker & Signaling Server Online\nActive Nodes: ' + clients.size);
+    res.end('Project Nexus P2P Matchmaker & Relay Server v1.1 Online\nActive Nodes: ' + clients.size);
   } else {
     res.writeHead(404);
     res.end();
