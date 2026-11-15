@@ -119,6 +119,32 @@ wss.on('connection', (ws, req) => {
           break;
         }
 
+        case 'start_relay': {
+          const targetId = cleanId(msg.targetId || msg.target_id);
+          const target = clients.get(targetId);
+          if (target && target.ws.readyState === WebSocket.OPEN) {
+            console.log(`[~] Starting Relay Tunnel: ${registeredId} <-> ${targetId}`);
+            target.ws.send(JSON.stringify({
+              action: 'incoming_relay',
+              senderId: registeredId,
+            }));
+          }
+          break;
+        }
+
+        case 'relay': {
+          const targetId = cleanId(msg.targetId || msg.target_id);
+          const target = clients.get(targetId);
+          if (target && target.ws.readyState === WebSocket.OPEN) {
+            target.ws.send(JSON.stringify({
+              action: 'relay',
+              senderId: registeredId,
+              data: msg.data,
+            }));
+          }
+          break;
+        }
+
         case 'ping': {
           ws.send(JSON.stringify({ status: 'pong', timestamp: Date.now() }));
           break;
